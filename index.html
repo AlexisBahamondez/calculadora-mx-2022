@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calculadora de sueldos - Buk México</title>
+
+		<link rel="stylesheet" href="./main.min.css" />
+		<link
+			rel="preload"
+			as="style"
+			href="./css/buk-main.css"
+			onload="this.rel='stylesheet'"
+		/>
+		<link
+			rel="preload"
+			as="style"
+			href="./css/buk-grid.css"
+			onload="this.rel='stylesheet'"
+		/>
+		<link
+			rel="preload"
+			as="style"
+			href="./css/utilities-spaces.css"
+			onload="this.rel='stylesheet'"
+		/>
+		<link rel="stylesheet" href="./css/custom-styles.css" />
+	</head>
+	<body>
+		<div class="boxer">
+			<div class="buk-mt-5 buk-mt-md-6">
+				<h2 class="txt-center buk-mb-4 txt-center buk-mb-4">
+					Calcula tu sueldo
+				</h2>
+				<div>
+					<h3 class="txt-left buk-mb-4">Selecciona un período</h3>
+					<button name="diario" class="btn btn--2 btn-period" type="button">
+						Diario
+					</button>
+					<button name="quincenal" class="btn btn--2 btn-period" type="button">
+						Quincenal
+					</button>
+					<button name="mensual" class="btn btn--2 btn-period" type="button">
+						Mensual
+					</button>
+				</div>
+
+				<br />
+				<div>
+					<h3 class="txt-left buk-mb-4">Ingresa tu sueldo bruto</h3>
+
+					<label class="control-label select required"
+						>Sueldo bruto <span class="SELECTED_PERIOD"></span> *</label
+					>
+					<div class="input-group">
+						<input
+							class="form-control string required"
+							required="required"
+							aria-required="true"
+							type="number"
+							min="1"
+							pattern="^[0-9]+"
+							id="sueldo-bruto"
+							value="0"
+						/>
+					</div>
+					<br />
+					<div>
+						<label
+							><input type="checkbox" id="imss-check" value="imss" /> Incluir
+							IMSS
+							<div class="tooltip">
+								<svg
+									class="tooltip-trigger"
+									xmlns="http://www.w3.org/2000/svg"
+									style="font-size: 24px"
+									height="15"
+									viewBox="0 0 512 512"
+								>
+									<path
+										d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+									/>
+								</svg>
+								<span class="tooltiptext">
+									Valor que aporta el patrón y el colaborador para asegurar su
+									seguro social.
+								</span>
+							</div> </label
+						><br />
+					</div>
+					<button id="calcular-sueldo" class="btn btn--2" type="button">
+						Calcular
+					</button>
+				</div>
+
+				<br />
+				<div>
+					<h3 class="txt-left buk-mb-4class=">Detalles de tu sueldo neto</h3>
+					<br />
+					<ul>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>Límite inferior
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										El valor mínimo existente (por período), al ubicar el
+										ingreso en el rango de la tabla del Impuesto Sobre la Renta
+										(ISR).
+									</span>
+								</div>
+							</label>
+							<span id="limite-inferior" type="number" min="0" pattern="^[0-9]+"
+								>0</span
+							>
+						</li>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>Excedente del límite inferior
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										Valor excedente que se obtiene al restar la base gravable
+										del periodo, al valor mínimo del rango del Impuesto Sobre la
+										Renta (ISR).
+									</span>
+								</div>
+							</label>
+							<span
+								id="excedente-limite-inferior"
+								type="number"
+								min="0"
+								pattern="^[0-9]+"
+								>0</span
+							>
+						</li>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>% sobre el excedente del límite inferior
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										La tasa es el porcentaje que se aplica al valor excedente
+										del límite inferior.
+									</span>
+								</div>
+							</label>
+							<span
+								id="porcentaje-excedente"
+								type="number"
+								min="0"
+								pattern="^[0-9]+"
+								>0</span
+							>
+						</li>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>Impuesto marginal
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										Es el impuesto resultante al aplicar la tasa.
+									</span>
+								</div>
+							</label>
+							<span
+								id="impuesto-marginal"
+								type="number"
+								min="0"
+								pattern="^[0-9]+"
+								>0</span
+							>
+						</li>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>Cuota fija del impuesto
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										Valor que se suma al impuesto marginal (se encuentra en la
+										tabla de ISR).
+									</span>
+								</div>
+							</label>
+							<span
+								id="cuota-fija-impuesto"
+								type="number"
+								min="0"
+								pattern="^[0-9]+"
+								>0</span
+							>
+						</li>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>ISR determinado
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										Contribución obligatoria o carga fiscal directa aplicable a
+										los ingresos obtenidos que incrementan el patrimonio del
+										empleado, que debe ser retenida por el patrón.
+									</span>
+								</div>
+							</label>
+							<span id="isr" type="number" min="0" pattern="^[0-9]+">0</span>
+						</li>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>IMSS
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										Valor que aporta el patrón y el colaborador para asegurar su
+										seguro social.
+									</span>
+								</div>
+							</label>
+							<span id="imss" type="number" min="0" pattern="^[0-9]+">0</span>
+						</li>
+						<li>
+							<label
+								class="control-label string required"
+								for="person_last_name"
+								>Subsidio al empleo
+								<div class="tooltip">
+									<svg
+										class="tooltip-trigger"
+										xmlns="http://www.w3.org/2000/svg"
+										style="font-size: 24px"
+										height="15"
+										viewBox="0 0 512 512"
+									>
+										<path
+											d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+										/>
+									</svg>
+									<span class="tooltiptext">
+										Valor que brinda el gobierno a los colaboradores y va en
+										función al ingreso obtenido, hasta por un monto de $7,382.33
+										MXN.
+									</span>
+								</div>
+							</label>
+							<span id="subsidio" type="number" min="0" pattern="^[0-9]+"
+								>0</span
+							>
+						</li>
+					</ul>
+				</div>
+
+				<br />
+				<div>
+					<h3 class="txt-left buk-mb-4class=">
+						Sueldo neto <span class="SELECTED_PERIOD"></span>
+						<div class="tooltip">
+							<svg
+								class="tooltip-trigger"
+								xmlns="http://www.w3.org/2000/svg"
+								style="font-size: 24px"
+								height="15"
+								viewBox="0 0 512 512"
+							>
+								<path
+									d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"
+								/>
+							</svg>
+							<span class="tooltiptext">
+								Valor total que recibe un colaborador después de que se le hagan
+								las retenciones correspondientes (puede considerar conceptos de
+								percepción adicionales al sueldo).
+							</span>
+						</div>
+					</h3>
+					<br />
+					<div class="input-group">
+						<div
+							class="total"
+							id="sueldo-neto"
+							type="number"
+							min="0"
+							pattern="^[0-9]+"
+						>
+							0
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<p>
+				*Esta calculadora contempla las prestaciones mínimas de ley. Los
+				resultados del ejercicio son de carácter informativo y es
+				responsabilidad del usuario hacer uso correcto del mismo.
+			</p>
+		</div>
+		<script type="module" src="src/index.js" defer></script>
+	</body>
+</html>
